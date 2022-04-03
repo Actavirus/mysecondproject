@@ -25,3 +25,14 @@ func main(){
 	err := http.ListenAndServe(":4000", mux)
 	log.Fatal(err)
 }
+type neuteredFileSystem struct {
+	fs http.Filesystem
+}
+func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
+	f, err := nfs.fs.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	s, err := f.Stat()
+	
+}
