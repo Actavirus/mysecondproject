@@ -38,30 +38,13 @@ func main(){
 	// Создаем логгер для записи сообщений об ошибках таким же образом, но используем stderr как
 	// место для записи и используем флаг log.Lshortfile для включения в лог
 	// названия файла и номера строки где обнаружилась ошибка.
-	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Lshortfile)
+	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	// Инициализируем новую структуру с зависимостями приложения.
 	app := &application{
 		errorLog: errorLog,
 		infoLog: infoLog,
 	}
-
-	// Используем методы из структуры в качестве обработчиков маршрутов.
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/snippet", app.showSnippet)
-	mux.HandleFunc("/snippet/create", app.createSnippet)
-
-	// Инициализируем FileServer, он будет обрабатывать
-	// HTTP-запросы к статическим файлам из папки "./ui/static".
-	// Обратите внимание, что переданный в функцию http.Dir путь
-	// является относительным корневой папке проекта
-	fileServer := http.FileServer(http.Dir("./ui/static"))
-
-	// Используем функцию mux.Handle() для регистрации обработчика для 
-	// всех запросов, которые начинаются с "/static/". Мы убираем
-	// префикс "/static" перед тем как запрос достигнет http.FileServer
-	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
 	// Инициализируем новую структуру http.Server. Мы устанавливаем поля Addr и Handler, так
 	// что сервер использует тот же сетевой адрес и маршруты, что и раньше, и назначаем
@@ -70,7 +53,7 @@ func main(){
 	srv := &http.Server{
 		Addr: *addr,
 		ErrorLog: errorLog,
-		Handler: mux,
+		Handler: app.routes(),	// Вызов нового метода app.routes()
 	}
 
 	infoLog.Printf("Запуск сервера на %s", *addr)
