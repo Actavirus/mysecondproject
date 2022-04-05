@@ -48,9 +48,19 @@ func main(){
 	// префикс "/static" перед тем как запрос достигнет http.FileServer
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
-	// Применяем созданные логгеры к нашему приложению.
+	// Инициализируем новую структуру http.Server. Мы устанавливаем поля Addr и Handler, так
+	// что сервер использует тот же сетевой адрес и маршруты, что и раньше, и назначаем
+	// поле ErrorLog, чтобы сервер использовал наш логгер
+	// при возникновении проблем.
+	srv := &http.Server{
+		Addr: *addr,
+		ErrorLog: errorLog,
+		Handler: mux,
+	}
+
 	infoLog.Printf("Запуск сервера на %s", *addr)
-	err := http.ListenAndServe(*addr, mux)
+	// Вызываем метод ListenAndServe() от нашей новой структуры http.Server
+	err := srv.ListenAndServe()
 	errorLog.Fatal(err)
 }
 type neuteredFileSystem struct {
