@@ -8,6 +8,7 @@ import (
 	"os"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"golangify.comsnippetbox/pkg/models/mysql"
 )
 
 // Создаем структуру `application` для хранения зависимостей всего веб-приложения.
@@ -16,6 +17,9 @@ import (
 type application struct {
 	errorLog *log.Logger
 	infoLog *log.Logger
+	// Добавляем поле snippets в структуру application. Это позволит
+	// сделать объект SnippetModel доступным для наших обработчиков.
+	snippets *mysql.SnippetModel
 }
 func main(){
 	// Создаем новый флаг командной строки, значение по умолчанию: ":4000".
@@ -62,6 +66,8 @@ func main(){
 	app := &application{
 		errorLog: errorLog,
 		infoLog: infoLog,
+		// Инициализируем экземпляр mysql.SnippetModel и добавляем его в зависимостях.
+		snippets: &mysql.SnippetModel{DB: db},
 	}
 
 	// Инициализируем новую структуру http.Server. Мы устанавливаем поля Addr и Handler, так
