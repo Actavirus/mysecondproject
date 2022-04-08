@@ -5,6 +5,8 @@ import (
     "net/http"
     "strconv"
     "html/template"
+    "errors"
+    "github.com/snippetbox/pkg/models"
 )
 // Обработчик главной страницы.
 // Меняем сигнатуры обработчика home, чтобы он определялся как метод
@@ -49,11 +51,25 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
     id, err := strconv.Atoi(r.URL.Query().Get("id"))
     if err != nil || id < 1 {
-        app.notFound(w) // Использование помощника notFound()
+        app.notFound(w) // Использование помощника notFound() // Страница не найдена.
         return
     }
 
-    fmt.Fprintf(w, "Отображение определенной заметки с ID %d...", id)
+    // Вызываем метода Get из модели Snipping для извлечения данных для
+	// конкретной записи на основе её ID. Если подходящей записи не найдено,
+	// то возвращается ответ 404 Not Found (Страница не найдена).
+    s, err := app.snippets.Get(id)
+    if err != nil {
+        if errors.Is(err, models.ErrNoRecord){
+            app.notFound(w)
+        } else {
+            app.serverError(w, err)
+        }
+        return
+    }
+
+    // Отображаем весь вывод на странице.
+    fmt.Fprintf(w, "%v", s)
 }
 
 // Меняем сигнатуру обработчика createSnippet, чтобы он определялся как метод
