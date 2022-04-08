@@ -8,7 +8,7 @@ import (
 	"os"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-	"golangify.comsnippetbox/pkg/models/mysql"
+	"github.com/snippetbox/pkg/models/mysql"
 )
 
 // Создаем структуру `application` для хранения зависимостей всего веб-приложения.

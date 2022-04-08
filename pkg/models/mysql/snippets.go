@@ -7,7 +7,7 @@ import (
 	// независимо от того, какой путь к модулю вы установили
 	// чтобы оператор импорта выглядел как
 	// "{ваш-путь-модуля}/pkg/models"..
-	"golangify.com/snippetbox/pkg/models"
+	"github.com/snippetbox/pkg/models"
 )
 
 // SnippetModel - Определяем тип который обертывает пул подключения sql.DB
