@@ -16,6 +16,16 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
         app.notFound(w) // Использование помощника notFound()
         return
     }
+
+    s, err := app.snippets.Latest()
+    if err != nil {
+        app.serverError(w, err)
+        return
+    }
+
+    for _, snippet := range s {
+        fmt.Fprintf(w, "%v\n", snippet)
+    }
     // Инициализируем срез содержащий пути к двум файлам. Обратите внимание, что
 	// файл home.page.tmpl должен быть *первым* файлом в срезе.
     // files := []string{
