@@ -4,7 +4,7 @@ import (
     "fmt"
     "net/http"
     "strconv"
-    // "html/template"
+    "html/template"
     "errors"
     "github.com/snippetbox/pkg/models"
 )
@@ -78,8 +78,28 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Отображаем весь вывод на странице.
-    fmt.Fprintf(w, "%v", s)
+    // Инициализируем срез, содержащий путь к файлу show.page.tmpl
+    // Добавив еще базовый шаблон и часть футера, который мы сделали ранее.
+    files := []string{
+        "./ui/html/show.page.tmpl",
+        "./ui/html/basy.layout.tmpl",
+        "./ui/html/footer.partial.tmpl",
+    }
+
+    // Парсинг файлов шаблонов...
+    ts, err := template.ParseFiles(files...)
+    if err != nil {
+        app.servererror(w, err)
+        return
+    }
+
+    // А затем выполняем их. Обратите внимание на передачу заметки с данными
+    // (структура models.Snippet) в качестве последнего параметра.
+    err = ts.Execute(w, s)
+    if err != nil {
+        app.serverError(w, err)
+    }
+
 }
 
 // Меняем сигнатуру обработчика createSnippet, чтобы он определялся как метод
