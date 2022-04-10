@@ -1,17 +1,21 @@
 {{template "base" .}}
 
-{{define "title"}} Заметка # {{.ID}}{{end}}
+{{define "title"}} Заметка # {{.Snippet.ID}}{{end}}
 
 {{define "main"}}
 <div class='snippet'>
     <div class='metadata'>
-        <strong>{{.Title}}</strong>
-        <span>>#{{.ID}}</span>
+        <strong>{{.Snippet.Title}}</strong>
+        <span>>#{{.Snippet.ID}}</span>
     </div>
-    <pre><code>{{.Content}}</code></pre>
+    <pre><code>{{.Snippet.Content}}</code></pre>
     <div class='metadata'>
-        <time>Создан: {{.Created}}</time>
-        <time>Срок: {{.Expires}}</time>
+        <time>Создан: {{.Snippet.Created}}</time>
+        <time>Срок: {{.Snippet.Expires}}</time>
+    </div>
+    <div class='metadata'>
+        <time>{{.Snippet.Created.Weekday}}</time>
+        <time>{{.Snippet.Expires.Weekday}}</time>
     </div>
 </div>
 {{end}}
