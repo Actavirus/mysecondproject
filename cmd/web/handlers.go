@@ -23,6 +23,12 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    // Используем помощника render() для отображения шаблона.
+    app.render(w, r, "home.page.tmpl", &templateData{
+        Snippets: s,
+    })
+
+/*
     // Создаем экземпляр структуры templateData,
     // содержащий срез с заметками.
     data := &templateData{Snippets: s}
@@ -57,6 +63,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		// из структуры application.
         app.serverError(w, err) // Использование помощника serverError()
     }
+*/
 }
 
 // Меняем сигнатуру обработчика showSnippet, чтобы он был определен как метод
@@ -81,6 +88,12 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    // Используем помощника render() для отображения шаблона.
+    app.render(w, r, "show.page.tmpl", &templateData{
+        Snippet: s,
+    })
+
+/*
     // Создаем экземпляр структуры templateData, содержащей данные заметки.
     data := &templateData{Snippet: s}
 
@@ -105,7 +118,7 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         app.serverError(w, err)
     }
-
+*/
 }
 
 // Меняем сигнатуру обработчика createSnippet, чтобы он определялся как метод

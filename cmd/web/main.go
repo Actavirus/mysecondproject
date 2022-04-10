@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/snippetbox/pkg/models/mysql"
+	"html/template"
 )
 
 // Создаем структуру `application` для хранения зависимостей всего веб-приложения.
@@ -20,7 +21,13 @@ type application struct {
 	// Добавляем поле snippets в структуру application. Это позволит
 	// сделать объект SnippetModel доступным для наших обработчиков.
 	snippets *mysql.SnippetModel
+	// Добавляем поле templateCache в структуру зависимостей. Это позволит
+	// получить доступ к кэшу во всех обработчиках.
+	templateCache map[string]*template.Template
 }
+
+
+
 func main(){
 	// Создаем новый флаг командной строки, значение по умолчанию: ":4000".
 	// Добавляем небольшую справку, объясняющая, что содержит данный флаг. 
@@ -62,12 +69,20 @@ func main(){
 	// Подробнее про defer: https://golangs.org/errors#defer
 	defer db.Close()
 
+	// Инициализируем новый кэш шаблона*...
+	templateCache, err := newTemplateCache("./ui/html/")
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	// Инициализируем новую структуру с зависимостями приложения.
 	app := &application{
 		errorLog: errorLog,
 		infoLog: infoLog,
 		// Инициализируем экземпляр mysql.SnippetModel и добавляем его в зависимостях.
 		snippets: &mysql.SnippetModel{DB: db},
+		// *... и добавляем его в зависимостях нашего веб-приложения.
+		templateCache: templateCache,
 	}
 
 	// Инициализируем новую структуру http.Server. Мы устанавливаем поля Addr и Handler, так
