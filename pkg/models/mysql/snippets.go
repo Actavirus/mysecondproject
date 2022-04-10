@@ -84,7 +84,7 @@ func (m *SnippetModel) Get(id int) (*models.Snippet, error) {
 // Latest - Метод возвращает последние 10 заметок.
 func (m *SnippetModel) Latest() ([]*models.Snippet, error) {
 	// Пишем SQL запрос, который мы хотим выполнить.
-	stmt := `SELECT id title, content, created, expires FROM snippets
+	stmt := `SELECT id, title, content, created, expires FROM snippets
 	WHERE expires > UTC_TIMESTAMP() ORDER BY created DESC LIMIT 10`
 
 	// Используем метод Query() для выполнения нашего SQL запроса.
