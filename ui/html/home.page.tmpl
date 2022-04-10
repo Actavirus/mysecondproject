@@ -3,6 +3,23 @@
 {{define "title"}}Домашняя страницы{{end}}
  
 {{define "main"}}
-<h2>Последние заметки (home.page.tmpl)</h2>
-<p>Пока здесь ничего нет! (home.page.tmpl)</p>
+    <h2>Последние заметки (home.page.tmpl)</h2>
+    {{if.Snippets}}
+    <table>
+        <tr>
+            <th>Заголовок</th>
+            <th>Создан</th>
+            <th>ID</th>
+        </tr>
+        {{range .Snippets}}
+        <tr>
+            <td><a href='/snippet?id={{.ID}}'>{{.Title}},/a></td>
+            <td>{{.Created}}</td>
+            <td>#{{.ID}}</td>
+        </tr>
+        {{end}}
+    </table>
+    {{else}}
+        <p>Здесь ничего нет... пока что! (home.page.tmpl)</p>
+    {{end}}
 {{end}}
