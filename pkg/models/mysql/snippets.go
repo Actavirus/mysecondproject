@@ -29,14 +29,14 @@ func (m *SnippetModel) Insert(title, content, expires string) (int, error) {
 	// заголовок заметки, содержимое и срока жизни заметки. Этот
 	// метод возвращает объект sql.Result, который содержит некоторые основные
 	// данные о том, что произошло после выполнении запроса.
-	results, err := m.DB.Exec(stmt, title, content, expires)
+	result, err := m.DB.Exec(stmt, title, content, expires)
 	if err != nil {
 		return 0, err
 	}
 
 	// Используем метод LastInsertId(), чтобы получить последний ID
 	// созданной записи из таблицу snippets.
-	id, err := results.LastInsertId()
+	id, err := result.LastInsertId()
 	if err != nil {
 		return 0, err
 	}
@@ -84,7 +84,7 @@ func (m *SnippetModel) Get(id int) (*models.Snippet, error) {
 // Latest - Метод возвращает последние 10 заметок.
 func (m *SnippetModel) Latest() ([]*models.Snippet, error) {
 	// Пишем SQL запрос, который мы хотим выполнить.
-	stmt := `SELECT id. title, content, created, expires FROM snippets
+	stmt := `SELECT id title, content, created, expires FROM snippets
 	WHERE expires > UTC_TIMESTAMP() ORDER BY created DESC LIMIT 10`
 
 	// Используем метод Query() для выполнения нашего SQL запроса.
