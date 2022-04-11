@@ -4,7 +4,7 @@ import (
     "fmt"
     "net/http"
     "strconv"
-    "html/template"
+    // "html/template"
     "errors"
     "github.com/snippetbox/pkg/models"
 )

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/snippetbox/pkg/models",
-	"html/template",
-	"path/filepath",
+	"github.com/snippetbox/pkg/models"
+	"html/template"
+	"path/filepath"
 )
 
 // Создаем тип templateData, который будет действовать как хранилище для
