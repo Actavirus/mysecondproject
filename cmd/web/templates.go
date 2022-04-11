@@ -41,7 +41,7 @@ func newTemplateCache(dir string) (map[string]*template.Template, error) {
 
 		// Используем метод ParseGlob для добавления всех каркасных шаблонов.
         // В нашем случае это только файл base.layout.tmpl (основная структура шаблона).
-		ts, err = ts.ParseGlob(filepath.Join(dir, ".layout.tmpl"))
+		ts, err = ts.ParseGlob(filepath.Join(dir, "*.layout.tmpl"))
 		if err != nil {
 			return nil, err
 		}
